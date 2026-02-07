@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Participant App POC">
+
+    <!-- Enable features 
+    <featureManager>
+        <feature>jakartaee-10.0</feature>
+    </featureManager>-->
+    
+    <featureManager>
+        <feature>springBoot-3.0</feature>
+        
+        <feature>servlet-6.0</feature>
+        <feature>jdbc-4.3</feature>
+        
+        <feature>jndi-1.0</feature>
+        
+        <feature>localConnector-1.0</feature>
+    </featureManager>
+
+    <!-- This template enables security. To get the full use of all the capabilities, a keystore and user registry are required. -->
+    
+    <!-- For the keystore, default keys are generated and stored in a keystore. To provide the keystore password, generate an 
+         encoded password using bin/securityUtility encode and add it below in the password attribute of the keyStore element. 
+         Then uncomment the keyStore element. -->
+    <!--
+    <keyStore password=""/> 
+    -->
+    
+    <!--For a user registry configuration, configure your user registry. For example, configure a basic user registry using the
+        basicRegistry element. Specify your own user name below in the name attribute of the user element. For the password, 
+        generate an encoded password using bin/securityUtility encode and add it in the password attribute of the user element. 
+        Then uncomment the user element. -->
+    <basicRegistry id="basic" realm="BasicRealm"> 
+        <!-- <user name="yourUserName" password="" />  --> 
+    </basicRegistry>
+    
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="7080"
+                  httpsPort="9443" />
+    
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true" dropinsEnabled="false"/>
+
+    <!-- Default SSL configuration enables trust for default certificates from the Java runtime --> 
+    <ssl id="defaultSSLConfig" trustDefaultCerts="true" />
+    
+    <library id="OracleLib">
+        <fileset dir="${shared.resource.dir}/jdbc" includes="ojdbc11*.jar"/>
+    </library>
+    
+    <dataSource id="ParticipantDS" jndiName="jdbc/ParticipantDS">
+        <jdbcDriver libraryRef="OracleLib"/>
+        <properties.oracle 
+            URL="jdbc:oracle:thin:@172.18.128.1:1521/XEPDB1" 
+            user="PARTICIPANT_APP" 
+            password="oracle" />
+        <connectionManager maxPoolSize="20" minPoolSize="2" connectionTimeout="30s" />
+    </dataSource>
+</server>
