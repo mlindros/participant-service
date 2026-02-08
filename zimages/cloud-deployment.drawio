@@ -1,0 +1,52 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+  <diagram id="fancy-cloud" name="Enterprise Cloud Deployment">
+    <mxGraphModel dx="1090" dy="873" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VPC" value="Virtual Private Cloud (VPC)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;dashPattern=8 8;startSize=30;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="760" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="PublicSubnet" value="Public Subnet (DMZ)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;startSize=23;" parent="VPC" vertex="1">
+          <mxGeometry x="30" y="50" width="180" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="IGW" value="Internet Gateway" style="outlineConnect=0;dashed=0;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;shape=mxgraph.aws3.internet_gateway;fillColor=#F58534;gradientColor=none;labelPosition=center;" parent="PublicSubnet" vertex="1">
+          <mxGeometry x="55" y="65" width="69" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="ALB" value="Application&#xa;Load Balancer" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.elastic_load_balancing;fillColor=#F58534;gradientColor=none;" parent="PublicSubnet" vertex="1">
+          <mxGeometry x="54" y="169" width="71" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="PrivateSubnet" value="Private Subnet (App &amp; Data)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;startSize=23;" parent="VPC" vertex="1">
+          <mxGeometry x="250" y="50" width="480" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="K8sCluster" value="Kubernetes / OpenShift Cluster" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;startSize=23;" parent="PrivateSubnet" vertex="1">
+          <mxGeometry x="30" y="60" width="220" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="Pod" value="App Pod" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" parent="K8sCluster" vertex="1">
+          <mxGeometry x="30" y="65" width="160" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Liberty" value="WebSphere Liberty&#xa;Java 25 Container" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="Pod" vertex="1">
+          <mxGeometry x="20" y="55" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EnvVar" value="ENV:&lt;div&gt;DB_HOST&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="Pod" vertex="1" connectable="0">
+          <mxGeometry x="130" y="37" as="geometry" />
+        </mxCell>
+        <mxCell id="Oracle" value="External Oracle DB&#xa;(OCI / Managed)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1" parent="PrivateSubnet" vertex="1">
+          <mxGeometry x="330" y="144" width="120" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Flow1" parent="1" source="IGW" target="ALB" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Flow2" parent="1" source="ALB" target="Liberty" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="315" as="sourcePoint" />
+            <mxPoint x="320" y="315" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Flow3" parent="1" source="Liberty" target="Oracle" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

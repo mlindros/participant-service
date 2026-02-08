@@ -7,14 +7,12 @@
     </featureManager>-->
     
     <featureManager>
-        <feature>springBoot-3.0</feature>
-        
+        <feature>springboot-3.0</feature>
         <feature>servlet-6.0</feature>
         <feature>jdbc-4.3</feature>
-        
         <feature>jndi-1.0</feature>
-        
-        <feature>localConnector-1.0</feature>
+        <feature>localconnector-1.0</feature>
+        <feature>expressionlanguage-5.0</feature>
     </featureManager>
 
     <!-- This template enables security. To get the full use of all the capabilities, a keystore and user registry are required. -->
@@ -49,13 +47,16 @@
     <library id="OracleLib">
         <fileset dir="${shared.resource.dir}/jdbc" includes="ojdbc11*.jar"/>
     </library>
-    
+
+    <variable name="DB_HOST" defaultValue="localhost" value="${env.DB_HOST}"/>
     <dataSource id="ParticipantDS" jndiName="jdbc/ParticipantDS">
         <jdbcDriver libraryRef="OracleLib"/>
-        <properties.oracle 
-            URL="jdbc:oracle:thin:@172.18.128.1:1521/XEPDB1" 
-            user="PARTICIPANT_APP" 
-            password="oracle" />
+        <properties.oracle
+                URL="jdbc:oracle:thin:@${DB_HOST}:1521/XEPDB1"
+                user="PARTICIPANT_APP"
+                password="oracle" />
         <connectionManager maxPoolSize="20" minPoolSize="2" connectionTimeout="30s" />
     </dataSource>
+
+    <webApplication location="service.war" contextRoot="/service" />
 </server>

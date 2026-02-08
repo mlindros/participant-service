@@ -1,0 +1,27 @@
+# Ignore Git
+.git
+.gitignore
+
+# Ignore IDEs
+.idea
+*.iml
+.vscode
+.classpath
+.project
+.settings
+
+# Ignore local build artifacts that we don't copy manually
+target/maven-archiver
+target/maven-status
+target/antrun
+target/classes
+target/test-classes
+
+# Ignore OS junk
+.DS_Store
+Thumbs.db
+
+# Ignore Maven wrapper (unless you specifically need it inside the container)
+.mvn
+mvnw
+mvnw.cmd

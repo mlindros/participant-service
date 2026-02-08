@@ -8,5 +8,7 @@ public final class AppConstants {
     public static final String ALREADY_ENROLLED = "ALREADY_ENROLLED";
     public static final String INELIGIBLE_AGE = "INELIGIBLE_AGE";
 
+    public static final String EMAIL_EXISTS = "EMAIL_EXISTS";
+
     public static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
 }

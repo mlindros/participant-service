@@ -34,6 +34,33 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(ParticipantException.class)
+    public ResponseEntity<ErrorResponse> handleParticipantException(ParticipantException ex) {
+        String message;
+        var status = switch(ex.getMessage()) {
+            case RECORD_NOT_FOUND -> {
+                message = "Participant not found";
+                yield HttpStatus.NOT_FOUND;
+            }
+            case EMAIL_EXISTS -> {
+                message = "Email already exists for participant";
+                yield HttpStatus.CONFLICT;
+            }
+            default -> {
+                message = "An unexpected error occurred. Please contact support.";
+                yield HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        };
+
+        var error = new ErrorResponse(
+                ex.getMessage(),
+                message,
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
         log.error("Unhandled exception occurred: ", ex);
