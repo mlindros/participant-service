@@ -45,6 +45,16 @@ The project is built following **SOLID principles** and a **Clean Architecture**
 * **Dockerized Setup:** Fully containerized environment with advanced networking
 * **Portable Configuration:** A single `server.xml` that uses variable injection to handle different DB hosts automatically
 
+### Security & Identity Management
+The API is secured as an **OAuth2 Resource Server**.
+
+* **Mechanism:** JWT (JSON Web Token) validation via Spring Security 6.x
+* **Access Control:**
+    * **Public:** Health checks and OpenAPI documentation are whitelisted for monitoring and discovery
+    * **Protected:** All business logic endpoints (e.g., `/participants`) require a valid Bearer Token
+    * **Fine-Grained Authorization:** Utilizes Spring Method Security `@PreAuthorize` to validate specific OIDC claims `email_verified` directly from the JWT payload, demonstrating an Attribute-Based Access Control (ABAC) pattern
+* **Demonstration:** A request to the API without a token correctly returns a `401 Unauthorized` status
+
 ## Folder Structure
 * `src/main/java`: Core application source code organized by layer (Controller, Service, Repository, DTO, Exception)
 * `src/main/resources`: Application properties and static configurations
@@ -55,11 +65,11 @@ The project is built following **SOLID principles** and a **Clean Architecture**
 ```
 com.example.participantservice
 ├── config                            # Infrastructure: System-wide setup (JNDI, Beans)
-│   ├── security                      # OAuth2: SecurityConfig, JWT Converters, and CORS rules
-│   │   └── WebSecurityConfig.java    # Configures the SecurityFilterChain, JWT decoding, and CORS policies
+│   ├── security                      # OAuth2: Implements an OIDC-compliant Resource Server with fine-grained authorization, validating Google JWT claims via Spring Method Security
+│   │   └── SecurityConfig.java       # Configures the SecurityFilterChain, JWT decoding, and CORS policies
 │   └── OpenApiConfig.java            # Configures Swagger/OpenAPI metadata and UI security schemes
 ├── controller                        # Web Layer: Entry point (Annotated with @PreAuthorize)
-│   └── ParticipantController.java    # Manages REST endpoints and enforces method-level security
+│   └── ParticipantController.java    # Manages REST endpoints and enforces method-level security using SpEL and JWT claims
 ├── domain                            # Business Logic Core: The "Source of Truth"
 │   ├── constant                      # System-wide constant values
 │   │   └── AppConstants.java         # Centralized constant values for consistency and to avoid hard coding
@@ -545,6 +555,8 @@ management.endpoint.health.show-details=always
 management.endpoints.web.exposure.include=health,info,metrics
 management.endpoint.health.probes.enabled=true
 
+# This triggers Spring to auto-create the JwtDecoder bean
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://accounts.google.com
 ```
 
 </details>
@@ -606,7 +618,25 @@ RUN configure.sh
 <img src="zimages/health-liveness.png" alt="Health Liveness via Actuator" />
 </kbd>
 
+### OAuth2.0 Security Enabled No Bearer Token `http://localhost:7080/service/api/participants`
+<kbd>
+<img src="zimages/oauth-enabled-no-bearer-token.png" alt="OAuth2.0 Security Enabled No Bearer Token" />
+</kbd>
 
+### OAuth2.0 Postman Configuration
+<kbd>
+<img src="zimages/oauth-postman-config.png" alt="OAuth2.0 Postman Configuration" />
+</kbd>
+
+### OAuth2.0 Google Configuration
+<kbd>
+<img src="zimages/oauth-google-idp-config.png" alt="OAuth2.0 Google Configuration" />
+</kbd>
+
+### OAuth2.0 Security Enabled WITH Bearer Token `http://localhost:7080/service/api/participants`
+<kbd>
+<img src="zimages/oauth-bearer-token.png" alt="OAuth2.0 Security Enabled WITH Bearer Token" />
+</kbd>
 
 
 

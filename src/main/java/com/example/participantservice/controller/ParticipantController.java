@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,7 +46,11 @@ public class ParticipantController {
     )
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all participants")
     @GetMapping
-    public ResponseEntity<List<ParticipantResponse>> getAll() {
+    //@PreAuthorize("hasAuthority('SCOPE_email')")
+    //@PreAuthorize("authentication.tokenAttributes['email_verified'] == true")
+    @PreAuthorize("authentication.tokenAttributes['email'] != null")
+    public ResponseEntity<List<ParticipantResponse>> getAll(/*org.springframework.security.core.Authentication auth*/) {
+        //System.out.println(">>> AUTHORITIES: " + auth.getAuthorities());
         //I could have theoretically just returned List<ParticipantDTO>
         return ResponseEntity.ok(participantService.getAll()
                 .stream()
