@@ -586,8 +586,6 @@ RUN configure.sh
 
 ## Screenshots
 
-<img src="zimages/cloud-deployment.drawio.png" alt="Cloud Deployment" />
-
 ### OpenAPI Landing Page
 <img src="zimages/01-openapi.png" alt="OpenAPI Landing Page" />
 
