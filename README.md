@@ -26,7 +26,7 @@ The project is built following **SOLID principles** and a **Clean Architecture**
 
 <img src="zimages/logical-data-flow.drawio.png" alt="Logical Data Flow" />
 
-<img src="zimages/cloud-deployment.drawio.png" alt="Logical Data Flow" />
+<img src="zimages/cloud-deployment.drawio.png" alt="Cloud Deployment" />
 
 ## Key Features
 ### Modern Java Development
@@ -96,6 +96,10 @@ com.example.participantservice
 * **REST API Base URL:** `http://localhost:7080/service/api/v1`
 * **OpenAPI UI:** `http://localhost:7080/swagger-ui.html`
 * **API Documentation (JSON):** `http://localhost:7080/v3/api-docs`
+* **Aggregate Health Check:** `http://localhost:7080/service/actuator/health`
+* **Liveness Health Check:** `http://localhost:7080/service/actuator/health/liveness`
+* **Readiness Health Check:** `http://localhost:7080/service/actuator/health/readiness`
+* **Metrics:** `http://localhost:7080/service/actuator/metrics`
 
 ## Environment Configurations
 This project features a **Multiple Build Configuration** strategy to support developers and DevOps teams:
@@ -512,6 +516,41 @@ Maven `ojdbc11` dependency downloads the JDBC driver for the Oracle Database. Th
 
 ---
 
+### Wiring Spring Boot to WebSphere Liberty JNDI for Oracle DataSource Connection via `application.properties` File
+WebSphere JNDI name for database datasource connection pool is mapped via the `application.properties` file.
+
+<details>
+<summary><b>Click to expand `application.properties` configuration</b></summary>
+
+```properties
+spring.application.name=participant-service
+
+# 1. The Link to Liberty's DataSource
+spring.datasource.jndi-name=jdbc/ParticipantDS
+
+# 2. The Oracle Dialect (Crucial for Hibernate 6+ / Spring Boot 4)
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+
+# 3. Prevent Hibernate from trying to open a separate connection for metadata
+spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults=false
+
+# 4. Disable DDL-Auto (since your table already exists)
+spring.jpa.hibernate.ddl-auto=none
+
+# 5. Show SQL (helpful for your learning/debugging phase)
+spring.jpa.show-sql=true
+
+# Show database status in the health check
+management.endpoint.health.show-details=always
+management.endpoints.web.exposure.include=health,info,metrics
+management.endpoint.health.probes.enabled=true
+
+```
+
+</details>
+
+---
+
 ### Docker Environment Definition
 This `Dockerfile` defines the containerized environment, using the Universal Base Image (UBI) and Open Liberty runtime to package the application with its required JDBC drivers and configuration.
 
@@ -543,6 +582,23 @@ RUN configure.sh
 
 </details>
 
+---
+
+## Screenshots
+
+<img src="zimages/cloud-deployment.drawio.png" alt="Cloud Deployment" />
+
+### OpenAPI Landing Page
+<img src="zimages/01-openapi.png" alt="OpenAPI Landing Page" />
+
+### OpenAPI GET `/api/participants`
+<img src="zimages/02-openapi-getall.png" alt="OpenAPI Get All Participants" />
+
+### Postman POST `/api/participants/enrollments` Postman Enroll Participant via PL/SQL Stored Procedure
+<img src="zimages/postman-enroll-participant-with-app-error.png" alt="Postman Enroll Participant via PL/SQL Stored Procedure" />
+
+### Health Liveness via Actuator `http://localhost:7080/service/actuator/health/liveness`
+<img src="zimages/health-liveness.png" alt="Health Liveness via Actuator" />
 
 
 
