@@ -592,13 +592,19 @@ RUN configure.sh
 </kbd>
 
 ### OpenAPI GET `/api/participants`
+<kbd>
 <img src="zimages/02-openapi-getall.png" alt="OpenAPI Get All Participants" />
+</kbd>
 
 ### Postman POST `/api/participants/enrollments` Postman Enroll Participant via PL/SQL Stored Procedure
+<kbd>
 <img src="zimages/postman-enroll-participant-with-app-error.png" alt="Postman Enroll Participant via PL/SQL Stored Procedure" />
+</kbd>
 
 ### Health Liveness via Actuator `http://localhost:7080/service/actuator/health/liveness`
+<kbd>
 <img src="zimages/health-liveness.png" alt="Health Liveness via Actuator" />
+</kbd>
 
 
 
