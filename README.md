@@ -587,7 +587,9 @@ RUN configure.sh
 ## Screenshots
 
 ### OpenAPI Landing Page
+<kbd>
 <img src="zimages/01-openapi.png" alt="OpenAPI Landing Page" />
+</kbd>
 
 ### OpenAPI GET `/api/participants`
 <img src="zimages/02-openapi-getall.png" alt="OpenAPI Get All Participants" />
